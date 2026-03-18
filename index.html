@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="小水果的学习记录网站，用于记录每日学习内容，支持编曲、数据分析、吉他乐理、AI等多个学习板块">
+    <meta name="keywords" content="学习记录,编曲,数据分析,吉他乐理,AI,每日学习">
+    <meta name="author" content="小水果">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="小水果的学习记录">
+    <meta property="og:description" content="记录每日学习内容，分享学习心得">
+    <meta property="og:type" content="website">
+    <title>小水果的学习记录</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a24;
+            --border-color: #2a2a3a;
+            --text-primary: #e8e8ec;
+            --text-secondary: #8888a0;
+            --accent-gold: #c9a962;
+            --accent-blue: #5b8def;
+            --accent-purple: #9d7aff;
+            --accent-green: #4ecdc4;
+            --accent-pink: #ff6b9d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(180deg, var(--bg-secondary), var(--bg-primary));
+            padding: 20px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+        }
+
+        .site-title span {
+            color: var(--accent-gold);
+        }
+
+        .datetime {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .checkin-wrapper {
+            position: relative;
+        }
+
+        .checkin-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--accent-gold);
+            border-radius: 20px;
+            background: transparent;
+            color: var(--accent-gold);
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkin-btn:hover {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+        }
+
+        .checkin-btn.checked {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+        }
+
+        .checkin-btn:active {
+            transform: scale(0.95);
+        }
+
+        .streak-count {
+            font-size: 13px;
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        .streak-count .count {
+            color: var(--accent-gold);
+            font-weight: 500;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .streak-count .count.bounce {
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+        }
+
+        .date-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .calendar-popup {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            min-width: 280px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .calendar-popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .calendar-popup.fixed {
+            box-shadow: 0 8px 32px rgba(201, 169, 98, 0.3);
+            border-color: var(--accent-gold);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .calendar-header .month {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .calendar-close {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-close:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            padding: 4px 0;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 8px 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .calendar-day.empty {
+            cursor: default;
+        }
+
+        .calendar-day.empty:hover {
+            background: transparent;
+        }
+
+        .calendar-day.today {
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-weight: 500;
+        }
+
+        .calendar-day.signed {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        .calendar-day.signed:hover {
+            background: #3db8af;
+        }
+
+        .calendar-day.signed.today {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 8px rgba(78, 205, 196, 0.5);
+        }
+
+        .calendar-day.fixed-day {
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 10px rgba(201, 169, 98, 0.4);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .category-btn:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        .category-btn.active {
+            background: var(--bg-tertiary);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .category-btn .category-actions {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            display: none;
+            gap: 4px;
+        }
+
+        .category-btn:hover .category-actions {
+            display: flex;
+        }
+
+        .category-action-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            border: none;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .category-action-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .category-action-btn.edit:hover {
+            background: var(--accent-blue);
+        }
+
+        .category-action-btn.delete:hover {
+            background: #ff6b6b;
+        }
+
+        .add-category-btn {
+            padding: 10px 20px;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-category-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 900px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 16px 20px;
+            }
+
+            .header-content {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .site-title {
+                font-size: 18px;
+            }
+
+            .header-right {
+                gap: 10px;
+            }
+
+            .checkin-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .streak-count {
+                font-size: 12px;
+            }
+
+            .datetime {
+                font-size: 12px;
+            }
+
+            main {
+                padding: 20px;
+            }
+
+            .categories {
+                gap: 8px;
+                margin-bottom: 24px;
+            }
+
+            .category-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .add-category-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .content-grid {
+                gap: 20px;
+            }
+
+            .input-area textarea {
+                min-height: 80px;
+                font-size: 13px;
+            }
+
+            .image-input {
+                font-size: 12px;
+                padding: 10px 12px;
+            }
+
+            .image-preview-item {
+                width: 60px;
+                height: 60px;
+            }
+
+            .entry-card {
+                padding: 16px;
+            }
+
+            .entry-content {
+                font-size: 13px;
+            }
+
+            .entry-images img {
+                max-width: 150px;
+                max-height: 120px;
+            }
+
+            .modal-content {
+                padding: 20px;
+                margin: 16px;
+            }
+
+            .color-picker {
+                gap: 6px;
+            }
+
+            .color-option {
+                width: 28px;
+                height: 28px;
+            }
+
+            .toast {
+                bottom: 20px;
+                padding: 12px 20px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 12px 16px;
+            }
+
+            .site-title {
+                font-size: 16px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+            }
+
+            .checkin-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+
+            .streak-count {
+                font-size: 11px;
+            }
+
+            .datetime {
+                font-size: 11px;
+            }
+
+            main {
+                padding: 16px;
+            }
+
+            .section-title {
+                font-size: 12px;
+                margin-bottom: 16px;
+            }
+
+            .categories {
+                gap: 6px;
+                margin-bottom: 20px;
+            }
+
+            .category-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .add-category-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .card {
+                padding: 14px;
+            }
+
+            .card-title {
+                font-size: 14px;
+                margin-bottom: 14px;
+            }
+
+            .input-area textarea {
+                min-height: 70px;
+                padding: 12px;
+                font-size: 13px;
+            }
+
+            .submit-btn {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .entry-card {
+                padding: 14px;
+            }
+
+            .entry-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .entry-content {
+                font-size: 13px;
+            }
+
+            .entry-images {
+                gap: 6px;
+            }
+
+            .entry-images img {
+                max-width: 100px;
+                max-height: 80px;
+            }
+
+            .entry-action-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+
+            .category-btn .category-actions {
+                display: flex;
+            }
+
+            .category-action-btn {
+                width: 20px;
+                height: 20px;
+                font-size: 9px;
+            }
+
+            .calendar-popup {
+                min-width: 260px;
+                padding: 12px;
+            }
+
+            .calendar-day {
+                padding: 6px 2px;
+                font-size: 11px;
+            }
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title::before {
+            content: '';
+            width: 3px;
+            height: 16px;
+            background: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        .input-area {
+            margin-bottom: 20px;
+        }
+
+        .input-area textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-area textarea:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .input-area textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .image-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 13px;
+            margin-bottom: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .image-input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .image-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .image-preview-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-preview-item .remove-btn:hover {
+            background: #ff6b6b;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent-gold), #b8943f);
+            color: var(--bg-primary);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(201, 169, 98, 0.3);
+        }
+
+        .entries-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .entry-card {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 3px solid var(--accent-gold);
+            transition: all 0.3s ease;
+        }
+
+        .entry-card:hover {
+            transform: translateX(4px);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .entry-category {
+            font-size: 12px;
+            color: var(--accent-gold);
+            background: rgba(201, 169, 98, 0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .entry-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .entry-content {
+            font-size: 14px;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .entry-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .entry-images img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .entry-images img:hover {
+            opacity: 0.8;
+        }
+
+        .entry-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .entry-action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .entry-action-btn:hover {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .entry-action-btn.delete:hover {
+            color: #ff6b6b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 32px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-content h3 {
+            font-size: 18px;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .modal-content input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-confirm {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+        }
+
+        .modal-confirm:hover {
+            box-shadow: 0 4px 20px rgba(201, 169, 98, 0.3);
+        }
+
+        .modal-cancel {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .modal-cancel:hover {
+            color: var(--text-primary);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 2000;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border-color);
+            opacity: 0;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: white;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1 class="site-title">小水果的学习<span>记录</span></h1>
+            <div class="header-right">
+                <div class="checkin-wrapper">
+                    <button class="checkin-btn" id="checkinBtn">签到</button>
+                </div>
+                <div class="streak-count">累计 <span class="count" id="streakCount">0</span> 天</div>
+                <div class="date-wrapper" id="dateWrapper">
+                    <div class="datetime" id="datetime"></div>
+                    <div class="calendar-popup" id="calendarPopup">
+                        <div class="calendar-header">
+                            <span class="month" id="calendarMonth"></span>
+                            <button class="calendar-close" id="calendarClose">×</button>
+                        </div>
+                        <div class="calendar-weekdays">
+                            <div class="calendar-weekday">日</div>
+                            <div class="calendar-weekday">一</div>
+                            <div class="calendar-weekday">二</div>
+                            <div class="calendar-weekday">三</div>
+                            <div class="calendar-weekday">四</div>
+                            <div class="calendar-weekday">五</div>
+                            <div class="calendar-weekday">六</div>
+                        </div>
+                        <div class="calendar-days" id="calendarDays"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="section-title">学习板块</div>
+        <div class="categories" id="categories">
+            <button class="category-btn active" data-category="编曲">编曲</button>
+            <button class="category-btn" data-category="数据分析">数据分析</button>
+            <button class="category-btn" data-category="吉他乐理">吉他乐理</button>
+            <button class="category-btn" data-category="AI">AI</button>
+            <button class="add-category-btn" id="addCategoryBtn">+ 添加板块</button>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2 class="card-title">记录今日学习</h2>
+                <div class="input-area">
+                    <textarea id="studyContent" placeholder="今天学习了什么呢？&#10;&#10;可以记录：&#10;• 学习内容&#10;• 心得体会&#10;• 遇到的问题"></textarea>
+                </div>
+                <input type="text" class="image-input" id="imageUrl" placeholder="输入图片链接 (可选)">
+                <div class="image-preview" id="imagePreview"></div>
+                <button class="submit-btn" id="saveEntry">保存记录</button>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title" id="entriesTitle">编曲 - 学习记录</h2>
+                <div class="entries-list" id="entriesList"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="categoryModal">
+        <div class="modal-content">
+            <h3>添加学习板块</h3>
+            <input type="text" id="newCategoryInput" placeholder="输入板块名称">
+            <div class="section-title" style="margin-bottom: 12px;">选择颜色</div>
+            <div class="color-picker" id="colorPicker"></div>
+            <div class="modal-buttons">
+                <button class="modal-cancel" onclick="closeCategoryModal()">取消</button>
+                <button class="modal-confirm" onclick="confirmAddCategory()">添加</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editCategoryModal">
+        <div class="modal-content">
+            <h3>编辑学习板块</h3>
+            <input type="text" id="editCategoryInput" placeholder="输入板块名称">
+            <div class="section-title" style="margin-bottom: 12px;">选择颜色</div>
+            <div class="color-picker" id="editColorPicker"></div>
+            <div class="modal-buttons">
+                <button class="modal-cancel" onclick="closeEditCategoryModal()">取消</button>
+                <button class="modal-confirm" onclick="confirmEditCategory()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const COLORS = [
+            '#c9a962', '#5b8def', '#9d7aff', '#4ecdc4', 
+            '#ff6b9d', '#ff8c42', '#6bcb77', '#e94560'
+        ];
+
+        const DEFAULT_CATEGORIES = ['编曲', '数据分析', '吉他乐理', 'AI'];
+        
+        let categories = [];
+        let currentCategory = '编曲';
+        let selectedColor = COLORS[0];
+        let editingColor = COLORS[0];
+        let entries = [];
+        let currentImages = [];
+        
+        let checkinData = {
+            totalDays: 0,
+            signedDates: []
+        };
+        
+        let calendarFixed = false;
+
+        const storage = {
+            get: (key, defaultValue) => {
+                try {
+                    const data = localStorage.getItem(key);
+                    return data ? JSON.parse(data) : defaultValue;
+                } catch {
+                    return defaultValue;
+                }
+            },
+            set: (key, value) => {
+                try {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } catch (e) {
+                    console.warn('localStorage unavailable');
+                }
+            }
+        };
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const weekday = weekdays[now.getDay()];
+            document.getElementById('datetime').textContent = `${year}年${month}月${day}日 ${weekday}`;
+        }
+
+        function loadCheckinData() {
+            const saved = storage.get('checkinData', null);
+            if (saved) {
+                checkinData = saved;
+            }
+            updateCheckinUI();
+        }
+
+        function updateCheckinUI() {
+            document.getElementById('streakCount').textContent = checkinData.totalDays;
+            const today = getTodayDateString();
+            const checkinBtn = document.getElementById('checkinBtn');
+            if (checkinData.signedDates.includes(today)) {
+                checkinBtn.textContent = '已签到';
+                checkinBtn.classList.add('checked');
+            } else {
+                checkinBtn.textContent = '签到';
+                checkinBtn.classList.remove('checked');
+            }
+        }
+
+        function getTodayDateString() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        function handleCheckin() {
+            const today = getTodayDateString();
+            if (checkinData.signedDates.includes(today)) {
+                showToast('今天已签到，明天再来吧');
+                return;
+            }
+            
+            checkinData.signedDates.push(today);
+            checkinData.totalDays += 1;
+            storage.set('checkinData', checkinData);
+            
+            const countEl = document.getElementById('streakCount');
+            countEl.classList.add('bounce');
+            setTimeout(() => countEl.classList.remove('bounce'), 500);
+            
+            updateCheckinUI();
+            renderCalendar();
+            showToast(`签到成功！累计 ${checkinData.totalDays} 天`);
+        }
+
+        function renderCalendar() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            
+            document.getElementById('calendarMonth').textContent = `${year}年${month + 1}月`;
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = now.getDate();
+            const todayStr = getTodayDateString();
+            
+            let html = '';
+            
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div class="calendar-day empty"></div>';
+            }
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isSigned = checkinData.signedDates.includes(dateStr);
+                const isToday = day === today;
+                
+                let classes = 'calendar-day';
+                if (isSigned) classes += ' signed';
+                if (isToday) classes += ' today';
+                
+                html += `<div class="${classes}" data-date="${dateStr}" onclick="handleCalendarDayClick('${dateStr}')">${day}</div>`;
+            }
+            
+            document.getElementById('calendarDays').innerHTML = html;
+        }
+
+        function handleCalendarDayClick(dateStr) {
+            calendarFixed = !calendarFixed;
+            const popup = document.getElementById('calendarPopup');
+            
+            if (calendarFixed) {
+                popup.classList.add('fixed');
+                document.querySelectorAll('.calendar-day').forEach(day => {
+                    if (day.dataset.date === dateStr) {
+                        day.classList.add('fixed-day');
+                    }
+                });
+            } else {
+                popup.classList.remove('fixed');
+                document.querySelectorAll('.calendar-day').forEach(day => {
+                    day.classList.remove('fixed-day');
+                });
+            }
+        }
+
+        function closeCalendar() {
+            calendarFixed = false;
+            document.getElementById('calendarPopup').classList.remove('show');
+            document.getElementById('calendarPopup').classList.remove('fixed');
+            document.querySelectorAll('.calendar-day').forEach(day => {
+                day.classList.remove('fixed-day');
+            });
+        }
+
+        function loadCategories() {
+            const saved = storage.get('studyCategories', null);
+            if (saved && saved.length > 0) {
+                categories = saved;
+            } else {
+                categories = DEFAULT_CATEGORIES.map(name => ({
+                    name,
+                    color: COLORS[categories.length % COLORS.length]
+                }));
+                storage.set('studyCategories', categories);
+            }
+            renderCategories();
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categories');
+            const addBtn = document.getElementById('addCategoryBtn');
+            
+            container.innerHTML = '';
+            
+            categories.forEach((cat, index) => {
+                const btn = document.createElement('button');
+                btn.className = `category-btn ${cat.name === currentCategory ? 'active' : ''}`;
+                btn.dataset.category = cat.name;
+                btn.style.borderColor = cat.name === currentCategory ? cat.color : '';
+                btn.style.color = cat.name === currentCategory ? cat.color : '';
+                btn.innerHTML = `
+                    ${cat.name}
+                    <div class="category-actions">
+                        <button class="category-action-btn edit" onclick="event.stopPropagation(); openEditCategoryModal(${index})" title="编辑">✎</button>
+                        <button class="category-action-btn delete" onclick="event.stopPropagation(); deleteCategory(${index})" title="删除">×</button>
+                    </div>
+                `;
+                btn.addEventListener('click', () => selectCategory(cat.name));
+                container.appendChild(btn);
+            });
+
+            container.appendChild(addBtn);
+        }
+
+        function selectCategory(name) {
+            currentCategory = name;
+            renderCategories();
+            renderEntries();
+            document.getElementById('entriesTitle').textContent = `${name} - 学习记录`;
+        }
+
+        function loadEntries() {
+            entries = storage.get('studyEntries', []);
+        }
+
+        function renderEntries() {
+            const container = document.getElementById('entriesList');
+            const categoryEntries = entries.filter(e => e.category === currentCategory);
+
+            if (categoryEntries.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📚</div>
+                        <p>还没有记录</p>
+                        <p>开始记录你的学习内容吧</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = categoryEntries.map(entry => `
+                <div class="entry-card" style="border-left-color: ${entry.color}">
+                    <div class="entry-header">
+                        <span class="entry-category" style="background: ${entry.color}20; color: ${entry.color}">${entry.category}</span>
+                        <span class="entry-date">${formatDate(entry.timestamp)}</span>
+                    </div>
+                    <div class="entry-content">${escapeHtml(entry.content)}</div>
+                    ${entry.images && entry.images.length > 0 ? `
+                        <div class="entry-images">
+                            ${entry.images.map(img => `<img src="${escapeHtml(img)}" alt="学习图片" onerror="this.style.display='none'">`).join('')}
+                        </div>
+                    ` : ''}
+                    <div class="entry-actions">
+                        <button class="entry-action-btn delete" onclick="deleteEntry(${entry.id})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / 86400000);
+
+            if (days === 0) return '今天';
+            if (days === 1) return '昨天';
+            if (days < 7) return `${days}天前`;
+            return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        document.getElementById('saveEntry').addEventListener('click', () => {
+            const content = document.getElementById('studyContent').value.trim();
+            
+            if (!content) {
+                showToast('请输入学习内容');
+                return;
+            }
+
+            const categoryData = categories.find(c => c.name === currentCategory);
+            
+            const newEntry = {
+                id: Date.now(),
+                category: currentCategory,
+                content: content,
+                images: currentImages,
+                color: categoryData ? categoryData.color : COLORS[0],
+                timestamp: new Date().toISOString()
+            };
+
+            entries.unshift(newEntry);
+            storage.set('studyEntries', entries);
+            
+            document.getElementById('studyContent').value = '';
+            document.getElementById('imageUrl').value = '';
+            currentImages = [];
+            renderImagePreview();
+            renderEntries();
+            showToast('记录已保存');
+        });
+
+        function deleteEntry(id) {
+            if (confirm('确定删除这条记录吗？')) {
+                entries = entries.filter(e => e.id !== id);
+                storage.set('studyEntries', entries);
+                renderEntries();
+                showToast('记录已删除');
+            }
+        }
+
+        document.getElementById('addCategoryBtn').addEventListener('click', () => {
+            document.getElementById('categoryModal').classList.add('show');
+            document.getElementById('newCategoryInput').value = '';
+            renderColorPicker();
+        });
+
+        function renderColorPicker() {
+            const container = document.getElementById('colorPicker');
+            container.innerHTML = COLORS.map(color => `
+                <div class="color-option ${color === selectedColor ? 'selected' : ''}" 
+                     style="background: ${color}" 
+                     data-color="${color}"></div>
+            `).join('');
+
+            container.querySelectorAll('.color-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    container.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                    selectedColor = opt.dataset.color;
+                });
+            });
+        }
+
+        function closeCategoryModal() {
+            document.getElementById('categoryModal').classList.remove('show');
+        }
+
+        function confirmAddCategory() {
+            const name = document.getElementById('newCategoryInput').value.trim();
+            
+            if (!name) {
+                showToast('请输入板块名称');
+                return;
+            }
+
+            if (categories.some(c => c.name === name)) {
+                showToast('该板块已存在');
+                return;
+            }
+
+            categories.push({ name, color: selectedColor });
+            storage.set('studyCategories', categories);
+            
+            currentCategory = name;
+            renderCategories();
+            closeCategoryModal();
+            
+            document.getElementById('entriesTitle').textContent = `${name} - 学习记录`;
+            renderEntries();
+            showToast(`板块 "${name}" 已添加`);
+        }
+
+        document.getElementById('categoryModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeCategoryModal();
+            }
+        });
+
+        let editingCategoryIndex = null;
+
+        function openEditCategoryModal(index) {
+            editingCategoryIndex = index;
+            const category = categories[index];
+            document.getElementById('editCategoryInput').value = category.name;
+            renderEditColorPicker(category.color);
+            document.getElementById('editCategoryModal').classList.add('show');
+        }
+
+        function renderEditColorPicker(selectedColor) {
+            const container = document.getElementById('editColorPicker');
+            container.innerHTML = COLORS.map(color => `
+                <div class="color-option ${color === selectedColor ? 'selected' : ''}" 
+                     style="background: ${color}" 
+                     data-color="${color}"></div>
+            `).join('');
+
+            container.querySelectorAll('.color-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    container.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                    editingColor = opt.dataset.color;
+                });
+            });
+        }
+
+        function closeEditCategoryModal() {
+            document.getElementById('editCategoryModal').classList.remove('show');
+            editingCategoryIndex = null;
+        }
+
+        function confirmEditCategory() {
+            const newName = document.getElementById('editCategoryInput').value.trim();
+            
+            if (!newName) {
+                showToast('请输入板块名称');
+                return;
+            }
+
+            const oldName = categories[editingCategoryIndex].name;
+            categories[editingCategoryIndex] = { name: newName, color: editingColor };
+            storage.set('studyCategories', categories);
+            
+            if (currentCategory === oldName) {
+                currentCategory = newName;
+            }
+            
+            entries.forEach(entry => {
+                if (entry.category === oldName) {
+                    entry.category = newName;
+                    entry.color = newColor;
+                }
+            });
+            storage.set('studyEntries', entries);
+            
+            renderCategories();
+            renderEntries();
+            closeEditCategoryModal();
+            document.getElementById('entriesTitle').textContent = `${currentCategory} - 学习记录`;
+            showToast('板块已更新');
+        }
+
+        function deleteCategory(index) {
+            const category = categories[index];
+            if (categories.length === 1) {
+                showToast('至少保留一个板块');
+                return;
+            }
+            
+            if (confirm(`确定删除板块 "${category.name}" 吗？\n该板块下的所有记录也会被删除。`)) {
+                const deletedName = category.name;
+                categories.splice(index, 1);
+                storage.set('studyCategories', categories);
+                
+                if (currentCategory === deletedName) {
+                    currentCategory = categories[0].name;
+                }
+                
+                entries = entries.filter(e => e.category !== deletedName);
+                storage.set('studyEntries', entries);
+                
+                renderCategories();
+                renderEntries();
+                document.getElementById('entriesTitle').textContent = `${currentCategory} - 学习记录`;
+                showToast('板块已删除');
+            }
+        }
+
+        document.getElementById('imageUrl').addEventListener('input', (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                if (!currentImages.includes(url)) {
+                    currentImages.push(url);
+                    renderImagePreview();
+                }
+                e.target.value = '';
+            }
+        });
+
+        function renderImagePreview() {
+            const container = document.getElementById('imagePreview');
+            if (currentImages.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = currentImages.map((url, index) => `
+                <div class="image-preview-item">
+                    <img src="${escapeHtml(url)}" alt="预览" onerror="this.parentElement.style.display='none'">
+                    <button class="remove-btn" onclick="removeImage(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function removeImage(index) {
+            currentImages.splice(index, 1);
+            renderImagePreview();
+        }
+
+        function init() {
+            updateDateTime();
+            loadCheckinData();
+            loadCategories();
+            loadEntries();
+            renderEntries();
+            document.getElementById('entriesTitle').textContent = `${currentCategory} - 学习记录`;
+            
+            document.getElementById('checkinBtn').addEventListener('click', handleCheckin);
+            
+            const dateWrapper = document.getElementById('dateWrapper');
+            const calendarPopup = document.getElementById('calendarPopup');
+            
+            dateWrapper.addEventListener('mouseenter', () => {
+                if (!calendarFixed) {
+                    calendarPopup.classList.add('show');
+                    renderCalendar();
+                }
+            });
+            
+            dateWrapper.addEventListener('mouseleave', () => {
+                setTimeout(() => {
+                    if (!calendarPopup.matches(':hover') && !calendarFixed) {
+                        calendarPopup.classList.remove('show');
+                    }
+                }, 100);
+            });
+            
+            calendarPopup.addEventListener('mouseenter', () => {
+                if (calendarFixed) {
+                    calendarPopup.style.display = 'block';
+                }
+            });
+            
+            calendarPopup.addEventListener('mouseleave', () => {
+                if (!calendarFixed) {
+                    calendarPopup.classList.remove('show');
+                }
+            });
+            
+            document.getElementById('calendarClose').addEventListener('click', closeCalendar);
+        }
+
+        init();
+    </script>
+</body>
+</html>
