@@ -984,6 +984,17 @@
 
     <div class="toast" id="toast"></div>
 
+    <div class="modal-overlay" id="nameModal">
+        <div class="modal-content">
+            <h3>欢迎！请输入你的昵称</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px;">这是你第一次登录，请给自己取一个名字吧</p>
+            <input type="text" id="nameInput" placeholder="请输入昵称" maxlength="10">
+            <div class="modal-buttons">
+                <button class="modal-confirm" style="flex: 1;" onclick="confirmName()">确定</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API_BASE = window.location.origin;
         
@@ -1002,6 +1013,7 @@
         let currentImages = [];
         
         let user = null;
+        let userName = '小水果';
         let checkinData = { totalDays: 0, signedDates: [] };
         let calendarFixed = false;
         
@@ -1587,13 +1599,21 @@
                     }
                 }
                 
+                if (result.user.name) {
+                    userName = result.user.name;
+                }
+                
                 updateUserSection();
                 renderCategories();
                 renderEntries();
                 updateCheckinUI();
                 closeLoginModal();
                 
-                showToast(`欢迎回来，${user.phone.slice(-4)}号用户`);
+                if (result.isNewUser) {
+                    document.getElementById('nameModal').classList.add('show');
+                } else {
+                    showToast(`欢迎回来，${userName}`);
+                }
             } else {
                 showToast(result?.message || '登录失败，请重试');
             }
@@ -1602,12 +1622,15 @@
         function logout() {
             user = null;
             localStorage.removeItem('user');
+            userName = localStorage.getItem('userName') || '小水果';
             updateUserSection();
             showToast('已退出登录');
         }
 
         function updateUserSection() {
             const section = document.getElementById('userSection');
+            
+            document.querySelector('.site-title').innerHTML = `${userName}的学习<span>记录</span>`;
             
             if (user) {
                 const last4 = user.phone.slice(-4);
@@ -1636,9 +1659,40 @@
             });
         }
 
+        async function confirmName() {
+            const name = document.getElementById('nameInput').value.trim();
+            
+            if (!name) {
+                showToast('请输入昵称');
+                return;
+            }
+            
+            const result = await apiRequest('/api/set-name', {
+                method: 'POST',
+                body: JSON.stringify({ userId: user.id, name })
+            });
+            
+            if (result && result.success) {
+                userName = result.name;
+                localStorage.setItem('userName', userName);
+                document.getElementById('nameModal').classList.remove('show');
+                updateUserSection();
+                showToast(`欢迎，${userName}！`);
+            } else {
+                showToast(result?.message || '设置失败，请重试');
+            }
+        }
+
         function init() {
             updateDateTime();
             loadLocalData();
+            
+            const savedName = localStorage.getItem('userName');
+            if (savedName) {
+                userName = savedName;
+            }
+            document.querySelector('.site-title').innerHTML = `${userName}的学习<span>记录</span>`;
+            
             updateUserSection();
             renderCategories();
             renderEntries();

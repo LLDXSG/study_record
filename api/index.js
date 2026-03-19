@@ -86,6 +86,7 @@ export default async function handler(req, res) {
                 user = {
                     id: generateId(),
                     phone,
+                    name: null,
                     createdAt: new Date().toISOString()
                 };
                 users.set(user.id, user);
@@ -95,9 +96,11 @@ export default async function handler(req, res) {
                 success: true,
                 user: {
                     id: user.id,
-                    phone: user.phone
+                    phone: user.phone,
+                    name: user.name
                 },
-                data: user.data || null
+                data: user.data || null,
+                isNewUser: !user.name
             });
             
         } catch (error) {
@@ -127,6 +130,35 @@ export default async function handler(req, res) {
             
         } catch (error) {
             console.error('sync error:', error);
+            return res.status(500).json({ success: false, message: '服务器错误' });
+        }
+    }
+
+    if (path === '/api/set-name' && method === 'POST') {
+        try {
+            const { userId, name } = req.body;
+            
+            if (!userId) {
+                return res.status(400).json({ success: false, message: '用户ID无效' });
+            }
+            
+            if (!name || name.trim().length === 0) {
+                return res.status(400).json({ success: false, message: '请输入昵称' });
+            }
+            
+            const user = users.get(userId);
+            
+            if (!user) {
+                return res.status(404).json({ success: false, message: '用户不存在' });
+            }
+            
+            user.name = name.trim();
+            users.set(userId, user);
+            
+            return res.status(200).json({ success: true, name: user.name });
+            
+        } catch (error) {
+            console.error('set-name error:', error);
             return res.status(500).json({ success: false, message: '服务器错误' });
         }
     }
