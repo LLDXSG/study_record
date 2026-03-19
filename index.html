@@ -69,15 +69,61 @@
             color: var(--accent-gold);
         }
 
-        .datetime {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
         .header-right {
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--bg-primary);
+            cursor: pointer;
+        }
+
+        .login-btn, .logout-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn {
+            border: 1px solid var(--accent-gold);
+            background: transparent;
+            color: var(--accent-gold);
+        }
+
+        .login-btn:hover {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+        }
+
+        .logout-btn {
+            border: 1px solid var(--text-secondary);
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .logout-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
         }
 
         .checkin-wrapper {
@@ -96,12 +142,7 @@
             transition: all 0.3s ease;
         }
 
-        .checkin-btn:hover {
-            background: var(--accent-gold);
-            color: var(--bg-primary);
-        }
-
-        .checkin-btn.checked {
+        .checkin-btn:hover, .checkin-btn.checked {
             background: var(--accent-gold);
             color: var(--bg-primary);
         }
@@ -113,7 +154,6 @@
         .streak-count {
             font-size: 13px;
             color: var(--text-secondary);
-            position: relative;
         }
 
         .streak-count .count {
@@ -135,6 +175,11 @@
         .date-wrapper {
             position: relative;
             cursor: pointer;
+        }
+
+        .datetime {
+            font-size: 14px;
+            color: var(--text-secondary);
         }
 
         .calendar-popup {
@@ -187,9 +232,6 @@
             color: var(--text-secondary);
             font-size: 14px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .calendar-close:hover {
@@ -225,7 +267,6 @@
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s ease;
-            position: relative;
         }
 
         .calendar-day:hover {
@@ -253,11 +294,6 @@
 
         .calendar-day.signed:hover {
             background: #3db8af;
-        }
-
-        .calendar-day.signed.today {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 8px rgba(78, 205, 196, 0.5);
         }
 
         .calendar-day.fixed-day {
@@ -335,7 +371,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
         }
 
         .category-action-btn:hover {
@@ -359,7 +394,6 @@
             font-family: inherit;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .add-category-btn:hover {
@@ -380,231 +414,32 @@
         }
 
         @media (max-width: 768px) {
-            header {
-                padding: 16px 20px;
-            }
-
-            .header-content {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-
-            .site-title {
-                font-size: 18px;
-            }
-
-            .header-right {
-                gap: 10px;
-            }
-
-            .checkin-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .streak-count {
-                font-size: 12px;
-            }
-
-            .datetime {
-                font-size: 12px;
-            }
-
-            main {
-                padding: 20px;
-            }
-
-            .categories {
-                gap: 8px;
-                margin-bottom: 24px;
-            }
-
-            .category-btn {
-                padding: 8px 14px;
-                font-size: 13px;
-            }
-
-            .add-category-btn {
-                padding: 8px 14px;
-                font-size: 13px;
-            }
-
-            .card {
-                padding: 16px;
-            }
-
-            .content-grid {
-                gap: 20px;
-            }
-
-            .input-area textarea {
-                min-height: 80px;
-                font-size: 13px;
-            }
-
-            .image-input {
-                font-size: 12px;
-                padding: 10px 12px;
-            }
-
-            .image-preview-item {
-                width: 60px;
-                height: 60px;
-            }
-
-            .entry-card {
-                padding: 16px;
-            }
-
-            .entry-content {
-                font-size: 13px;
-            }
-
-            .entry-images img {
-                max-width: 150px;
-                max-height: 120px;
-            }
-
-            .modal-content {
-                padding: 20px;
-                margin: 16px;
-            }
-
-            .color-picker {
-                gap: 6px;
-            }
-
-            .color-option {
-                width: 28px;
-                height: 28px;
-            }
-
-            .toast {
-                bottom: 20px;
-                padding: 12px 20px;
-                font-size: 13px;
-            }
+            header { padding: 16px 20px; }
+            .header-content { flex-wrap: wrap; gap: 12px; }
+            .site-title { font-size: 18px; }
+            .header-right { gap: 10px; }
+            .checkin-btn, .streak-count, .datetime { font-size: 12px; }
+            main { padding: 20px; }
+            .categories { gap: 8px; margin-bottom: 24px; }
+            .category-btn, .add-category-btn { padding: 8px 14px; font-size: 13px; }
+            .card { padding: 16px; }
+            .content-grid { gap: 20px; }
+            .modal-content { padding: 20px; margin: 16px; }
+            .toast { bottom: 20px; padding: 12px 20px; font-size: 13px; }
         }
 
         @media (max-width: 480px) {
-            header {
-                padding: 12px 16px;
-            }
-
-            .site-title {
-                font-size: 16px;
-            }
-
-            .header-right {
-                width: 100%;
-                justify-content: flex-end;
-                flex-wrap: wrap;
-            }
-
-            .checkin-btn {
-                padding: 5px 10px;
-                font-size: 11px;
-            }
-
-            .streak-count {
-                font-size: 11px;
-            }
-
-            .datetime {
-                font-size: 11px;
-            }
-
-            main {
-                padding: 16px;
-            }
-
-            .section-title {
-                font-size: 12px;
-                margin-bottom: 16px;
-            }
-
-            .categories {
-                gap: 6px;
-                margin-bottom: 20px;
-            }
-
-            .category-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .add-category-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .card {
-                padding: 14px;
-            }
-
-            .card-title {
-                font-size: 14px;
-                margin-bottom: 14px;
-            }
-
-            .input-area textarea {
-                min-height: 70px;
-                padding: 12px;
-                font-size: 13px;
-            }
-
-            .submit-btn {
-                padding: 10px;
-                font-size: 13px;
-            }
-
-            .entry-card {
-                padding: 14px;
-            }
-
-            .entry-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .entry-content {
-                font-size: 13px;
-            }
-
-            .entry-images {
-                gap: 6px;
-            }
-
-            .entry-images img {
-                max-width: 100px;
-                max-height: 80px;
-            }
-
-            .entry-action-btn {
-                padding: 5px 10px;
-                font-size: 11px;
-            }
-
-            .category-btn .category-actions {
-                display: flex;
-            }
-
-            .category-action-btn {
-                width: 20px;
-                height: 20px;
-                font-size: 9px;
-            }
-
-            .calendar-popup {
-                min-width: 260px;
-                padding: 12px;
-            }
-
-            .calendar-day {
-                padding: 6px 2px;
-                font-size: 11px;
-            }
+            header { padding: 12px 16px; }
+            .site-title { font-size: 16px; }
+            .header-right { width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+            .checkin-btn, .streak-count, .datetime { font-size: 11px; }
+            main { padding: 16px; }
+            .categories { gap: 6px; margin-bottom: 20px; }
+            .category-btn, .add-category-btn { padding: 6px 12px; font-size: 12px; }
+            .card { padding: 14px; }
+            .category-btn .category-actions { display: flex; }
+            .calendar-popup { min-width: 260px; padding: 12px; }
+            .calendar-day { padding: 6px 2px; font-size: 11px; }
         }
 
         .card {
@@ -647,7 +482,6 @@
             font-size: 14px;
             resize: vertical;
             min-height: 100px;
-            transition: border-color 0.3s ease;
         }
 
         .input-area textarea:focus {
@@ -669,7 +503,6 @@
             font-family: inherit;
             font-size: 13px;
             margin-bottom: 16px;
-            transition: border-color 0.3s ease;
         }
 
         .image-input:focus {
@@ -801,11 +634,6 @@
             border-radius: 8px;
             border: 1px solid var(--border-color);
             cursor: pointer;
-            transition: opacity 0.3s ease;
-        }
-
-        .entry-images img:hover {
-            opacity: 0.8;
         }
 
         .entry-actions {
@@ -825,7 +653,6 @@
             font-family: inherit;
             font-size: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .entry-action-btn:hover {
@@ -895,7 +722,7 @@
             color: var(--text-primary);
             font-family: inherit;
             font-size: 14px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
 
         .modal-content input:focus {
@@ -903,9 +730,47 @@
             border-color: var(--accent-gold);
         }
 
+        .modal-content .input-group {
+            margin-bottom: 16px;
+        }
+
+        .modal-content .input-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .modal-content .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .modal-content .input-row input {
+            margin-bottom: 0;
+        }
+
+        .modal-content .verify-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent-blue);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .modal-content .verify-btn:disabled {
+            background: var(--border-color);
+            cursor: not-allowed;
+        }
+
         .modal-buttons {
             display: flex;
             gap: 12px;
+            margin-top: 24px;
         }
 
         .modal-buttons button {
@@ -916,7 +781,6 @@
             font-family: inherit;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .modal-confirm {
@@ -935,6 +799,30 @@
 
         .modal-cancel:hover {
             color: var(--text-primary);
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: white;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
 
         .toast {
@@ -958,29 +846,18 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        .color-picker {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
+        .sync-status {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-left: 8px;
         }
 
-        .color-option {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .sync-status.syncing {
+            color: var(--accent-blue);
         }
 
-        .color-option:hover {
-            transform: scale(1.1);
-        }
-
-        .color-option.selected {
-            border-color: white;
-            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        .sync-status.synced {
+            color: var(--accent-green);
         }
 
         ::-webkit-scrollbar {
@@ -1006,6 +883,9 @@
         <div class="header-content">
             <h1 class="site-title">小水果的学习<span>记录</span></h1>
             <div class="header-right">
+                <div class="user-section" id="userSection">
+                    <button class="login-btn" id="loginBtn">登录</button>
+                </div>
                 <div class="checkin-wrapper">
                     <button class="checkin-btn" id="checkinBtn">签到</button>
                 </div>
@@ -1035,13 +915,7 @@
 
     <main>
         <div class="section-title">学习板块</div>
-        <div class="categories" id="categories">
-            <button class="category-btn active" data-category="编曲">编曲</button>
-            <button class="category-btn" data-category="数据分析">数据分析</button>
-            <button class="category-btn" data-category="吉他乐理">吉他乐理</button>
-            <button class="category-btn" data-category="AI">AI</button>
-            <button class="add-category-btn" id="addCategoryBtn">+ 添加板块</button>
-        </div>
+        <div class="categories" id="categories"></div>
 
         <div class="content-grid">
             <div class="card">
@@ -1055,11 +929,32 @@
             </div>
 
             <div class="card">
-                <h2 class="card-title" id="entriesTitle">编曲 - 学习记录</h2>
+                <h2 class="card-title" id="entriesTitle">学习记录</h2>
                 <div class="entries-list" id="entriesList"></div>
             </div>
         </div>
     </main>
+
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <h3>登录 / 注册</h3>
+            <div class="input-group">
+                <label>手机号</label>
+                <div class="input-row">
+                    <input type="tel" id="phoneInput" placeholder="请输入手机号" maxlength="11">
+                    <button class="verify-btn" id="sendVerifyBtn">发送验证码</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>验证码</label>
+                <input type="text" id="verifyCodeInput" placeholder="请输入验证码" maxlength="6">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-cancel" onclick="closeLoginModal()">取消</button>
+                <button class="modal-confirm" onclick="confirmLogin()">登录</button>
+            </div>
+        </div>
+    </div>
 
     <div class="modal-overlay" id="categoryModal">
         <div class="modal-content">
@@ -1090,6 +985,8 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        const API_BASE = window.location.origin;
+        
         const COLORS = [
             '#c9a962', '#5b8def', '#9d7aff', '#4ecdc4', 
             '#ff6b9d', '#ff8c42', '#6bcb77', '#e94560'
@@ -1104,12 +1001,13 @@
         let entries = [];
         let currentImages = [];
         
-        let checkinData = {
-            totalDays: 0,
-            signedDates: []
-        };
-        
+        let user = null;
+        let checkinData = { totalDays: 0, signedDates: [] };
         let calendarFixed = false;
+        
+        let localCategories = [];
+        let localEntries = [];
+        let localCheckinData = { totalDays: 0, signedDates: [] };
 
         const storage = {
             get: (key, defaultValue) => {
@@ -1123,9 +1021,7 @@
             set: (key, value) => {
                 try {
                     localStorage.setItem(key, JSON.stringify(value));
-                } catch (e) {
-                    console.warn('localStorage unavailable');
-                }
+                } catch (e) {}
             }
         };
 
@@ -1146,12 +1042,47 @@
             document.getElementById('datetime').textContent = `${year}年${month}月${day}日 ${weekday}`;
         }
 
-        function loadCheckinData() {
-            const saved = storage.get('checkinData', null);
-            if (saved) {
-                checkinData = saved;
+        function getTodayDateString() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        async function apiRequest(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                return null;
             }
-            updateCheckinUI();
+        }
+
+        function loadLocalData() {
+            localCategories = storage.get('studyCategories', null);
+            localEntries = storage.get('studyEntries', []);
+            localCheckinData = storage.get('checkinData', { totalDays: 0, signedDates: [] });
+            
+            if (!localCategories || localCategories.length === 0) {
+                localCategories = DEFAULT_CATEGORIES.map((name, i) => ({
+                    name,
+                    color: COLORS[i % COLORS.length]
+                }));
+                storage.set('studyCategories', localCategories);
+            }
+            
+            categories = localCategories;
+            entries = localEntries;
+            checkinData = localCheckinData;
+            
+            if (categories.length > 0) {
+                currentCategory = categories[0].name;
+            }
         }
 
         function updateCheckinUI() {
@@ -1167,11 +1098,6 @@
             }
         }
 
-        function getTodayDateString() {
-            const now = new Date();
-            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        }
-
         function handleCheckin() {
             const today = getTodayDateString();
             if (checkinData.signedDates.includes(today)) {
@@ -1181,6 +1107,7 @@
             
             checkinData.signedDates.push(today);
             checkinData.totalDays += 1;
+            
             storage.set('checkinData', checkinData);
             
             const countEl = document.getElementById('streakCount');
@@ -1189,6 +1116,11 @@
             
             updateCheckinUI();
             renderCalendar();
+            
+            if (user) {
+                syncToServer();
+            }
+            
             showToast(`签到成功！累计 ${checkinData.totalDays} 天`);
         }
 
@@ -1202,7 +1134,6 @@
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const today = now.getDate();
-            const todayStr = getTodayDateString();
             
             let html = '';
             
@@ -1225,17 +1156,12 @@
             document.getElementById('calendarDays').innerHTML = html;
         }
 
-        function handleCalendarDayClick(dateStr) {
+        function handleCalendarDayClick() {
             calendarFixed = !calendarFixed;
             const popup = document.getElementById('calendarPopup');
             
             if (calendarFixed) {
                 popup.classList.add('fixed');
-                document.querySelectorAll('.calendar-day').forEach(day => {
-                    if (day.dataset.date === dateStr) {
-                        day.classList.add('fixed-day');
-                    }
-                });
             } else {
                 popup.classList.remove('fixed');
                 document.querySelectorAll('.calendar-day').forEach(day => {
@@ -1248,35 +1174,31 @@
             calendarFixed = false;
             document.getElementById('calendarPopup').classList.remove('show');
             document.getElementById('calendarPopup').classList.remove('fixed');
-            document.querySelectorAll('.calendar-day').forEach(day => {
-                day.classList.remove('fixed-day');
-            });
-        }
-
-        function loadCategories() {
-            const saved = storage.get('studyCategories', null);
-            if (saved && saved.length > 0) {
-                categories = saved;
-            } else {
-                categories = DEFAULT_CATEGORIES.map(name => ({
-                    name,
-                    color: COLORS[categories.length % COLORS.length]
-                }));
-                storage.set('studyCategories', categories);
-            }
-            renderCategories();
         }
 
         function renderCategories() {
             const container = document.getElementById('categories');
             const addBtn = document.getElementById('addCategoryBtn');
             
-            container.innerHTML = '';
+            if (!addBtn) {
+                const btn = document.createElement('button');
+                btn.className = 'add-category-btn';
+                btn.id = 'addCategoryBtn';
+                btn.textContent = '+ 添加板块';
+                btn.addEventListener('click', () => {
+                    document.getElementById('categoryModal').classList.add('show');
+                    document.getElementById('newCategoryInput').value = '';
+                    renderColorPicker();
+                });
+                container.appendChild(btn);
+            }
+            
+            const existingBtns = container.querySelectorAll('.category-btn');
+            existingBtns.forEach(btn => btn.remove());
             
             categories.forEach((cat, index) => {
                 const btn = document.createElement('button');
                 btn.className = `category-btn ${cat.name === currentCategory ? 'active' : ''}`;
-                btn.dataset.category = cat.name;
                 btn.style.borderColor = cat.name === currentCategory ? cat.color : '';
                 btn.style.color = cat.name === currentCategory ? cat.color : '';
                 btn.innerHTML = `
@@ -1287,10 +1209,8 @@
                     </div>
                 `;
                 btn.addEventListener('click', () => selectCategory(cat.name));
-                container.appendChild(btn);
+                container.insertBefore(btn, document.getElementById('addCategoryBtn'));
             });
-
-            container.appendChild(addBtn);
         }
 
         function selectCategory(name) {
@@ -1298,10 +1218,6 @@
             renderCategories();
             renderEntries();
             document.getElementById('entriesTitle').textContent = `${name} - 学习记录`;
-        }
-
-        function loadEntries() {
-            entries = storage.get('studyEntries', []);
         }
 
         function renderEntries() {
@@ -1370,7 +1286,7 @@
                 id: Date.now(),
                 category: currentCategory,
                 content: content,
-                images: currentImages,
+                images: [...currentImages],
                 color: categoryData ? categoryData.color : COLORS[0],
                 timestamp: new Date().toISOString()
             };
@@ -1383,6 +1299,11 @@
             currentImages = [];
             renderImagePreview();
             renderEntries();
+            
+            if (user) {
+                syncToServer();
+            }
+            
             showToast('记录已保存');
         });
 
@@ -1391,15 +1312,14 @@
                 entries = entries.filter(e => e.id !== id);
                 storage.set('studyEntries', entries);
                 renderEntries();
+                
+                if (user) {
+                    syncToServer();
+                }
+                
                 showToast('记录已删除');
             }
         }
-
-        document.getElementById('addCategoryBtn').addEventListener('click', () => {
-            document.getElementById('categoryModal').classList.add('show');
-            document.getElementById('newCategoryInput').value = '';
-            renderColorPicker();
-        });
 
         function renderColorPicker() {
             const container = document.getElementById('colorPicker');
@@ -1444,14 +1364,13 @@
             
             document.getElementById('entriesTitle').textContent = `${name} - 学习记录`;
             renderEntries();
+            
+            if (user) {
+                syncToServer();
+            }
+            
             showToast(`板块 "${name}" 已添加`);
         }
-
-        document.getElementById('categoryModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) {
-                closeCategoryModal();
-            }
-        });
 
         let editingCategoryIndex = null;
 
@@ -1504,7 +1423,7 @@
             entries.forEach(entry => {
                 if (entry.category === oldName) {
                     entry.category = newName;
-                    entry.color = newColor;
+                    entry.color = editingColor;
                 }
             });
             storage.set('studyEntries', entries);
@@ -1513,6 +1432,11 @@
             renderEntries();
             closeEditCategoryModal();
             document.getElementById('entriesTitle').textContent = `${currentCategory} - 学习记录`;
+            
+            if (user) {
+                syncToServer();
+            }
+            
             showToast('板块已更新');
         }
 
@@ -1538,6 +1462,11 @@
                 renderCategories();
                 renderEntries();
                 document.getElementById('entriesTitle').textContent = `${currentCategory} - 学习记录`;
+                
+                if (user) {
+                    syncToServer();
+                }
+                
                 showToast('板块已删除');
             }
         }
@@ -1573,15 +1502,159 @@
             renderImagePreview();
         }
 
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('show');
+            document.getElementById('phoneInput').value = '';
+            document.getElementById('verifyCodeInput').value = '';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('show');
+        }
+
+        let verifyCodeCountdown = 0;
+        
+        document.getElementById('sendVerifyBtn').addEventListener('click', async () => {
+            const phone = document.getElementById('phoneInput').value.trim();
+            
+            if (!phone || phone.length !== 11) {
+                showToast('请输入正确的手机号');
+                return;
+            }
+            
+            const btn = document.getElementById('sendVerifyBtn');
+            btn.disabled = true;
+            
+            const result = await apiRequest('/api/send-code', {
+                method: 'POST',
+                body: JSON.stringify({ phone })
+            });
+            
+            if (result && result.success) {
+                showToast('验证码已发送');
+                verifyCodeCountdown = 60;
+                const countdown = setInterval(() => {
+                    verifyCodeCountdown--;
+                    if (verifyCodeCountdown <= 0) {
+                        clearInterval(countdown);
+                        btn.disabled = false;
+                        btn.textContent = '发送验证码';
+                    } else {
+                        btn.textContent = `${verifyCodeCountdown}秒后重发`;
+                    }
+                }, 1000);
+            } else {
+                showToast(result?.message || '发送失败，请稍后重试');
+                btn.disabled = false;
+            }
+        });
+
+        async function confirmLogin() {
+            const phone = document.getElementById('phoneInput').value.trim();
+            const code = document.getElementById('verifyCodeInput').value.trim();
+            
+            if (!phone || phone.length !== 11) {
+                showToast('请输入正确的手机号');
+                return;
+            }
+            
+            if (!code || code.length !== 6) {
+                showToast('请输入6位验证码');
+                return;
+            }
+            
+            const result = await apiRequest('/api/login', {
+                method: 'POST',
+                body: JSON.stringify({ phone, code })
+            });
+            
+            if (result && result.success) {
+                user = result.user;
+                localStorage.setItem('user', JSON.stringify(user));
+                
+                if (result.data) {
+                    if (result.data.categories) {
+                        categories = result.data.categories;
+                        storage.set('studyCategories', categories);
+                    }
+                    if (result.data.entries) {
+                        entries = result.data.entries;
+                        storage.set('studyEntries', entries);
+                    }
+                    if (result.data.checkinData) {
+                        checkinData = result.data.checkinData;
+                        storage.set('checkinData', checkinData);
+                    }
+                }
+                
+                updateUserSection();
+                renderCategories();
+                renderEntries();
+                updateCheckinUI();
+                closeLoginModal();
+                
+                showToast(`欢迎回来，${user.phone.slice(-4)}号用户`);
+            } else {
+                showToast(result?.message || '登录失败，请重试');
+            }
+        }
+
+        function logout() {
+            user = null;
+            localStorage.removeItem('user');
+            updateUserSection();
+            showToast('已退出登录');
+        }
+
+        function updateUserSection() {
+            const section = document.getElementById('userSection');
+            
+            if (user) {
+                const last4 = user.phone.slice(-4);
+                section.innerHTML = `
+                    <div class="user-avatar">${last4}</div>
+                    <button class="logout-btn" onclick="logout()">退出</button>
+                `;
+            } else {
+                section.innerHTML = `<button class="login-btn" id="loginBtn">登录</button>`;
+                document.getElementById('loginBtn').addEventListener('click', showLoginModal);
+            }
+        }
+
+        async function syncToServer() {
+            if (!user) return;
+            
+            const data = {
+                categories: categories,
+                entries: entries,
+                checkinData: checkinData
+            };
+            
+            await apiRequest('/api/sync', {
+                method: 'POST',
+                body: JSON.stringify({ userId: user.id, data })
+            });
+        }
+
         function init() {
             updateDateTime();
-            loadCheckinData();
-            loadCategories();
-            loadEntries();
+            loadLocalData();
+            updateUserSection();
+            renderCategories();
             renderEntries();
-            document.getElementById('entriesTitle').textContent = `${currentCategory} - 学习记录`;
+            updateCheckinUI();
+            
+            if (categories.length > 0) {
+                document.getElementById('entriesTitle').textContent = `${currentCategory} - 学习记录`;
+            }
             
             document.getElementById('checkinBtn').addEventListener('click', handleCheckin);
+            
+            const savedUser = storage.get('user', null);
+            if (savedUser) {
+                user = savedUser;
+                updateUserSection();
+            }
             
             const dateWrapper = document.getElementById('dateWrapper');
             const calendarPopup = document.getElementById('calendarPopup');
@@ -1599,12 +1672,6 @@
                         calendarPopup.classList.remove('show');
                     }
                 }, 100);
-            });
-            
-            calendarPopup.addEventListener('mouseenter', () => {
-                if (calendarFixed) {
-                    calendarPopup.style.display = 'block';
-                }
             });
             
             calendarPopup.addEventListener('mouseleave', () => {
